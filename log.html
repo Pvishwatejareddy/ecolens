@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoLens — Log My Day</title>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+  <style>
+    body { background: var(--cream); }
+
+    .log-page {
+      padding: 100px 5% 80px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ── HEADER ── */
+    .log-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .log-header .eyebrow {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--sienna);
+      margin-bottom: 12px;
+    }
+
+    .log-header h1 { margin-bottom: 12px; }
+    .log-header h1 em { color: var(--moss); font-style: italic; }
+    .log-header p { opacity: 0.65; max-width: 480px; margin: 0 auto; }
+
+    /* ── PROGRESS STEPS ── */
+    .log-steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 48px;
+    }
+
+    .log-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .log-step-circle {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--parchment);
+      border: 2px solid rgba(96,108,56,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.4s ease;
+      z-index: 2;
+    }
+
+    .log-step.active .log-step-circle {
+      background: var(--moss);
+      border-color: var(--moss);
+      box-shadow: 0 4px 16px rgba(96,108,56,0.35);
+    }
+
+    .log-step.done .log-step-circle {
+      background: var(--sage);
+      border-color: var(--sage);
+    }
+
+    .log-step-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--moss-dark);
+      opacity: 0.5;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .log-step.active .log-step-label { opacity: 1; color: var(--moss); }
+    .log-step.done  .log-step-label  { opacity: 0.8; }
+
+    .step-connector {
+      width: 80px; height: 2px;
+      background: rgba(96,108,56,0.12);
+      margin-bottom: 24px;
+      transition: background 0.4s ease;
+    }
+
+    .step-connector.done { background: var(--sage); }
+
+    /* ── SECTION CARDS ── */
+    .log-section {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(96,108,56,0.06);
+      display: none;
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    .log-section.active { display: block; }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .section-icon {
+      width: 52px; height: 52px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+    }
+
+    .section-icon.transport { background: rgba(72,202,228,0.12); }
+    .section-icon.food      { background: rgba(82,183,136,0.12); }
+    .section-icon.energy    { background: rgba(221,161,94,0.12); }
+    .section-icon.shopping  { background: rgba(188,108,37,0.1); }
+
+    .section-title-text h3 { font-size: 1.2rem; margin-bottom: 4px; }
+    .section-title-text p  { font-size: 0.82rem; opacity: 0.6; }
+
+    /* ── OPTION PILLS ── */
+    .option-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .pill {
+      padding: 10px 20px;
+      border-radius: var(--radius-full);
+      background: var(--parchment);
+      border: 2px solid transparent;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--moss-dark);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill:hover {
+      border-color: var(--moss);
+      background: rgba(96,108,56,0.06);
+    }
+
+    .pill.selected {
+      background: var(--moss);
+      color: var(--cream);
+      border-color: var(--moss);
+    }
+
+    /* ── SLIDER GROUP ── */
+    .slider-wrap {
+      margin-bottom: 32px;
+    }
+
+    .slider-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .slider-top label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--moss-dark);
+    }
+
+    .slider-val {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--sienna);
+      background: rgba(188,108,37,0.1);
+      padding: 3px 12px;
+      border-radius: var(--radius-full);
+      min-width: 70px;
+      text-align: center;
+    }
+
+    /* ── TOGGLE SWITCHES ── */
+    .toggle-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: var(--parchment);
+      border-radius: var(--radius-md);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-item.checked {
+      border-color: rgba(96,108,56,0.2);
+      background: rgba(96,108,56,0.05);
+    }
+
+    .toggle-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .toggle-emoji { font-size: 1.4rem; }
+
+    .toggle-info h5 {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--moss-dark);
+      margin-bottom: 2px;
+    }
+
+    .toggle-info p {
+      font-size: 0.75rem;
+      opacity: 0.55;
+    }
+
+    /* Toggle switch */
+    .switch {
+      position: relative;
+      width: 48px; height: 26px;
+      flex-shrink: 0;
+    }
+
+    .switch input { display: none; }
+
+    .switch-slider {
+      position: absolute;
+      inset: 0;
+      background: #ddd;
+      border-radius: 13px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .switch-slider::before {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: white;
+      top: 3px; left: 3px;
+      transition: transform 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .switch input:checked + .switch-slider {
+      background: var(--moss);
+    }
+
+    .switch input:checked + .switch-slider::before {
+      transform: translateX(22px);
+    }
+
+    /* ── CO2 PREVIEW ── */
+    .co2-preview {
+      background: linear-gradient(135deg, var(--moss-dark), var(--moss));
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+
+    .co2-preview .co2-left h5 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(254,250,224,0.6);
+      margin-bottom: 4px;
+    }
+
+    .co2-preview .co2-val {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--cream);
+    }
+
+    .co2-preview .co2-unit {
+      font-size: 0.82rem;
+      color: rgba(254,250,224,0.6);
+      margin-top: 2px;
+    }
+
+    .co2-preview .co2-bar-wrap {
+      flex: 1;
+      margin: 0 24px;
+    }
+
+    .co2-bar-track {
+      height: 8px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .co2-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--sage), var(--amber));
+      transition: width 0.5s ease;
+    }
+
+    .co2-preview .co2-compare {
+      font-size: 0.75rem;
+      color: rgba(254,250,224,0.55);
+      margin-top: 6px;
+    }
+
+    .co2-globe-mini {
+      font-size: 2.4rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* ── NAVIGATION BUTTONS ── */
+    .log-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 32px;
+      gap: 16px;
+    }
+
+    .log-back {
+      padding: 14px 28px;
+      border-radius: var(--radius-full);
+      background: var(--parchment);
+      border: 2px solid rgba(96,108,56,0.15);
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--moss-dark);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .log-back:hover {
+      border-color: var(--moss);
+      background: rgba(96,108,56,0.06);
+    }
+
+    .log-next {
+      flex: 1;
+      padding: 16px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--moss), var(--moss-dark));
+      color: var(--cream);
+      border: none;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(96,108,56,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .log-next:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(96,108,56,0.4);
+    }
+
+    .log-next.submit {
+      background: linear-gradient(135deg, var(--amber), var(--sienna));
+      box-shadow: 0 4px 20px rgba(188,108,37,0.3);
+    }
+
+    /* ── SUCCESS SCREEN ── */
+    .log-success {
+      display: none;
+      text-align: center;
+      padding: 60px 40px;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    .log-success.show { display: block; }
+
+    .success-globe {
+      font-size: 5rem;
+      margin-bottom: 24px;
+      display: block;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    .success-score {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--moss-dark);
+      margin: 16px 0 8px;
+    }
+
+    .success-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .step-connector { width: 40px; }
+      .log-section    { padding: 24px 20px; }
+      .option-pills   { gap: 8px; }
+      .pill           { padding: 8px 14px; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">Eco<span>Lens</span></div>
+    <ul class="nav-links">
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="log.html" class="active">Log Day</a></li>
+      <li><a href="insights.html">Insights</a></li>
+      <li><a href="history.html">History</a></li>
+      <li><a href="badges.html">Badges</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="nav-streak">🔥 <span class="nav-streak-count">0</span></div>
+      <div class="nav-avatar"
+        onclick="window.location.href='profile.html'">🌱</div>
+    </div>
+  </nav>
+
+  <!-- MOBILE NAV -->
+  <nav class="mobile-nav">
+    <ul>
+      <li><a href="dashboard.html">
+        <span class="nav-icon">🏠</span>Home</a></li>
+      <li><a href="log.html" class="active">
+        <span class="nav-icon">📝</span>Log</a></li>
+      <li><a href="insights.html">
+        <span class="nav-icon">🤖</span>AI</a></li>
+      <li><a href="history.html">
+        <span class="nav-icon">📈</span>History</a></li>
+      <li><a href="badges.html">
+        <span class="nav-icon">🏅</span>Badges</a></li>
+    </ul>
+  </nav>
+
+  <div class="log-page">
+
+    <!-- HEADER -->
+    <div class="log-header animate-fadeUp">
+      <div class="eyebrow">📝 Daily Check-in</div>
+      <h1>Log Your <em>Day</em></h1>
+      <p>Tell us about your day and we'll calculate your
+         carbon footprint in seconds</p>
+    </div>
+
+    <!-- STEPS -->
+    <div class="log-steps animate-fadeUp delay-1">
+      <div class="log-step active" id="step-ind-0">
+        <div class="log-step-circle">🚗</div>
+        <div class="log-step-label">Transport</div>
+      </div>
+      <div class="step-connector" id="conn-0"></div>
+      <div class="log-step" id="step-ind-1">
+        <div class="log-step-circle">🥗</div>
+        <div class="log-step-label">Food</div>
+      </div>
+      <div class="step-connector" id="conn-1"></div>
+      <div class="log-step" id="step-ind-2">
+        <div class="log-step-circle">⚡</div>
+        <div class="log-step-label">Energy</div>
+      </div>
+      <div class="step-connector" id="conn-2"></div>
+      <div class="log-step" id="step-ind-3">
+        <div class="log-step-circle">🛍️</div>
+        <div class="log-step-label">Shopping</div>
+      </div>
+      <div class="step-connector" id="conn-3"></div>
+      <div class="log-step" id="step-ind-4">
+        <div class="log-step-circle">✅</div>
+        <div class="log-step-label">Done</div>
+      </div>
+    </div>
+
+    <!-- SECTION 0: TRANSPORT -->
+    <div class="log-section active" id="section-0">
+      <div class="section-title">
+        <div class="section-icon transport">🚗</div>
+        <div class="section-title-text">
+          <h3>Transport</h3>
+          <p>How did you get around today?</p>
+        </div>
+      </div>
+
+      <p style="font-size:0.85rem;font-weight:600;
+                color:var(--moss-dark);margin-bottom:14px;">
+        Primary mode of transport:
+      </p>
+      <div class="option-pills" id="transport-pills">
+        <div class="pill selected" data-val="car"
+          onclick="selectPill(this,'transport-pills','transportMode')">
+          🚗 Car
+        </div>
+        <div class="pill" data-val="motorcycle"
+          onclick="selectPill(this,'transport-pills','transportMode')">
+          🏍️ Motorcycle
+        </div>
+        <div class="pill" data-val="bus"
+          onclick="selectPill(this,'transport-pills','transportMode')">
+          🚌 Bus
+        </div>
+        <div class="pill" data-val="train"
+          onclick="selectPill(this,'transport-pills','transportMode')">
+          🚆 Train / Metro
+        </div>
+        <div class="pill" data-val="cycle"
+          onclick="selectPill(this,'transport-pills','transportMode')">
+          🚲 Cycle
+        </div>
+        <div class="pill" data-val="walk"
+          onclick="selectPill(this,'transport-pills','transportMode')">
+          🚶 Walked
+        </div>
+        <div class="pill" data-val="flight"
+          onclick="selectPill(this,'transport-pills','transportMode')">
+          ✈️ Flight
+        </div>
+        <div class="pill" data-val="none"
+          onclick="selectPill(this,'transport-pills','transportMode')">
+          🏠 Stayed Home
+        </div>
+      </div>
+
+      <div class="slider-wrap" id="kmSliderWrap">
+        <div class="slider-top">
+          <label>Distance travelled today</label>
+          <span class="slider-val" id="kmVal">10 km</span>
+        </div>
+        <input type="range" min="0" max="200" value="10"
+          oninput="updateSlider('km',this.value,'km');
+                   logData.transportKm=+this.value;
+                   updateCO2Preview()"/>
+      </div>
+
+      <div class="co2-preview">
+        <div class="co2-left">
+          <h5>Section CO₂</h5>
+          <div class="co2-val" id="transport-co2">0.0</div>
+          <div class="co2-unit">kg CO₂</div>
+        </div>
+        <div class="co2-bar-wrap">
+          <div class="co2-bar-track">
+            <div class="co2-bar-fill" id="transport-bar"
+              style="width:0%"></div>
+          </div>
+          <div class="co2-compare">vs. 12.9 kg global average</div>
+        </div>
+        <div class="co2-globe-mini">🚗</div>
+      </div>
+
+      <div class="log-nav">
+        <div></div>
+        <button class="log-next" onclick="nextSection()">
+          Next: Food 🥗 →
+        </button>
+      </div>
+    </div>
+
+    <!-- SECTION 1: FOOD -->
+    <div class="log-section" id="section-1">
+      <div class="section-title">
+        <div class="section-icon food">🥗</div>
+        <div class="section-title-text">
+          <h3>Food & Diet</h3>
+          <p>What did you eat today?</p>
+        </div>
+      </div>
+
+      <p style="font-size:0.85rem;font-weight:600;
+                color:var(--moss-dark);margin-bottom:14px;">
+        Today's primary diet:
+      </p>
+      <div class="option-pills" id="food-pills">
+        <div class="pill" data-val="vegan"
+          onclick="selectPill(this,'food-pills','foodType')">
+          🌱 Vegan
+        </div>
+        <div class="pill selected" data-val="vegetarian"
+          onclick="selectPill(this,'food-pills','foodType')">
+          🥗 Vegetarian
+        </div>
+        <div class="pill" data-val="chicken"
+          onclick="selectPill(this,'food-pills','foodType')">
+          🍗 Chicken/Fish
+        </div>
+        <div class="pill" data-val="beef"
+          onclick="selectPill(this,'food-pills','foodType')">
+          🥩 Red Meat
+        </div>
+      </div>
+
+      <div class="slider-wrap">
+        <div class="slider-top">
+          <label>Number of meals today</label>
+          <span class="slider-val" id="mealsVal">3 meals</span>
+        </div>
+        <input type="range" min="1" max="6" value="3"
+          oninput="updateSlider('meals',this.value,'meals');
+                   logData.meals=+this.value;
+                   updateCO2Preview()"/>
+      </div>
+
+      <div class="co2-preview">
+        <div class="co2-left">
+          <h5>Section CO₂</h5>
+          <div class="co2-val" id="food-co2">1.2</div>
+          <div class="co2-unit">kg CO₂</div>
+        </div>
+        <div class="co2-bar-wrap">
+          <div class="co2-bar-track">
+            <div class="co2-bar-fill" id="food-bar"
+              style="width:10%"></div>
+          </div>
+          <div class="co2-compare">Vegan diet = 73% less emissions</div>
+        </div>
+        <div class="co2-globe-mini">🥗</div>
+      </div>
+
+      <div class="log-nav">
+        <button class="log-back" onclick="prevSection()">
+          ← Back
+        </button>
+        <button class="log-next" onclick="nextSection()">
+          Next: Energy ⚡ →
+        </button>
+      </div>
+    </div>
+
+    <!-- SECTION 2: ENERGY -->
+    <div class="log-section" id="section-2">
+      <div class="section-title">
+        <div class="section-icon energy">⚡</div>
+        <div class="section-title-text">
+          <h3>Home Energy</h3>
+          <p>How much energy did you use at home?</p>
+        </div>
+      </div>
+
+      <div class="slider-wrap">
+        <div class="slider-top">
+          <label>Electricity used today (estimated)</label>
+          <span class="slider-val" id="elecVal">5 kWh</span>
+        </div>
+        <input type="range" min="0" max="50" value="5"
+          oninput="updateSlider('elec',this.value,'kWh');
+                   logData.electricityKwh=+this.value;
+                   updateCO2Preview()"/>
+      </div>
+
+      <div class="toggle-group">
+        <div class="toggle-item" id="acToggle">
+          <div class="toggle-left">
+            <span class="toggle-emoji">❄️</span>
+            <div class="toggle-info">
+              <h5>Used AC / Heater today</h5>
+              <p>Adds ~2 kWh per hour of use</p>
+            </div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="acCheck"
+              onchange="logData.usedAC=this.checked;
+                        updateCO2Preview();
+                        toggleItem('acToggle',this.checked)"/>
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-item" id="solarToggle">
+          <div class="toggle-left">
+            <span class="toggle-emoji">☀️</span>
+            <div class="toggle-info">
+              <h5>Used solar / renewable energy</h5>
+              <p>Significantly reduces your footprint</p>
+            </div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="solarCheck"
+              onchange="logData.usedSolar=this.checked;
+                        updateCO2Preview();
+                        toggleItem('solarToggle',this.checked);
+                        if(this.checked) unlockBadge('sun_chaser')"/>
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="co2-preview">
+        <div class="co2-left">
+          <h5>Section CO₂</h5>
+          <div class="co2-val" id="energy-co2">4.1</div>
+          <div class="co2-unit">kg CO₂</div>
+        </div>
+        <div class="co2-bar-wrap">
+          <div class="co2-bar-track">
+            <div class="co2-bar-fill" id="energy-bar"
+              style="width:32%"></div>
+          </div>
+          <div class="co2-compare">
+            Indian grid avg: 0.82 kg per kWh
+          </div>
+        </div>
+        <div class="co2-globe-mini">⚡</div>
+      </div>
+
+      <div class="log-nav">
+        <button class="log-back" onclick="prevSection()">← Back</button>
+        <button class="log-next" onclick="nextSection()">
+          Next: Shopping 🛍️ →
+        </button>
+      </div>
+    </div>
+
+    <!-- SECTION 3: SHOPPING -->
+    <div class="log-section" id="section-3">
+      <div class="section-title">
+        <div class="section-icon shopping">🛍️</div>
+        <div class="section-title-text">
+          <h3>Shopping & Consumption</h3>
+          <p>What did you buy today?</p>
+        </div>
+      </div>
+
+      <div class="toggle-group">
+        <div class="toggle-item" id="clothToggle">
+          <div class="toggle-left">
+            <span class="toggle-emoji">👕</span>
+            <div class="toggle-info">
+              <h5>Bought new clothing</h5>
+              <p>~10 kg CO₂ per clothing item</p>
+            </div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="clothCheck"
+              onchange="logData.boughtClothing=this.checked;
+                        updateCO2Preview();
+                        toggleItem('clothToggle',this.checked)"/>
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-item" id="techToggle">
+          <div class="toggle-left">
+            <span class="toggle-emoji">📱</span>
+            <div class="toggle-info">
+              <h5>Bought electronics / gadgets</h5>
+              <p>~70 kg CO₂ per device</p>
+            </div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="techCheck"
+              onchange="logData.boughtElectronics=this.checked;
+                        updateCO2Preview();
+                        toggleItem('techToggle',this.checked)"/>
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-item" id="onlineToggle">
+          <div class="toggle-left">
+            <span class="toggle-emoji">📦</span>
+            <div class="toggle-info">
+              <h5>Online delivery / ordered food</h5>
+              <p>~0.5 kg CO₂ per delivery</p>
+            </div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="onlineCheck"
+              onchange="logData.onlineDelivery=this.checked;
+                        updateCO2Preview();
+                        toggleItem('onlineToggle',this.checked)"/>
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="slider-wrap">
+        <div class="slider-top">
+          <label>Groceries purchased (kg)</label>
+          <span class="slider-val" id="grocVal">2 kg</span>
+        </div>
+        <input type="range" min="0" max="20" value="2"
+          oninput="updateSlider('groc',this.value,'kg');
+                   logData.groceriesKg=+this.value;
+                   updateCO2Preview()"/>
+      </div>
+
+      <div class="co2-preview">
+        <div class="co2-left">
+          <h5>Section CO₂</h5>
+          <div class="co2-val" id="shopping-co2">1.0</div>
+          <div class="co2-unit">kg CO₂</div>
+        </div>
+        <div class="co2-bar-wrap">
+          <div class="co2-bar-track">
+            <div class="co2-bar-fill" id="shopping-bar"
+              style="width:8%"></div>
+          </div>
+          <div class="co2-compare">
+            Fashion = 10% of global CO₂ emissions
+          </div>
+        </div>
+        <div class="co2-globe-mini">🛍️</div>
+      </div>
+
+      <div class="log-nav">
+        <button class="log-back" onclick="prevSection()">← Back</button>
+        <button class="log-next submit" onclick="submitLog()">
+          🌍 Calculate My Carbon Score
+        </button>
+      </div>
+    </div>
+
+    <!-- SUCCESS SCREEN -->
+    <div class="log-success" id="logSuccess">
+      <span class="success-globe" id="successGlobe">🌍</span>
+      <h2>Today's Carbon Score</h2>
+      <div class="success-score" id="successScore">0.0</div>
+      <p style="font-size:1rem;color:var(--moss);
+                font-weight:600;">kg CO₂ today</p>
+
+      <div id="successMessage"
+        style="margin:20px auto;max-width:440px;
+               font-size:0.92rem;opacity:0.7;line-height:1.8;">
+      </div>
+
+      <div id="factAfterLog" style="margin:20px 0;"></div>
+
+      <div class="success-actions">
+        <a href="insights.html" class="btn btn-primary btn-lg">
+          🤖 Get AI Insights
+        </a>
+        <a href="dashboard.html" class="btn btn-secondary btn-lg">
+          📊 View Dashboard
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    requireLogin();
+
+    let currentSection = 0;
+    const totalSections = 4;
+
+    // Log data object
+    let logData = {
+      transportMode:    'car',
+      transportKm:      10,
+      foodType:         'vegetarian',
+      meals:            3,
+      electricityKwh:   5,
+      usedAC:           false,
+      usedSolar:        false,
+      boughtClothing:   false,
+      boughtElectronics:false,
+      onlineDelivery:   false,
+      groceriesKg:      2,
+    };
+
+    // ── PILL SELECTOR ──
+    function selectPill(el, groupId, key) {
+      document.querySelectorAll(`#${groupId} .pill`)
+        .forEach(p => p.classList.remove('selected'));
+      el.classList.add('selected');
+      logData[key] = el.dataset.val;
+
+      // Hide km slider for walk/cycle/home
+      if (key === 'transportMode') {
+        const hide = ['walk','cycle','none'].includes(el.dataset.val);
+        document.getElementById('kmSliderWrap').style.display =
+          hide ? 'none' : 'block';
+        if (hide) logData.transportKm = 0;
+      }
+      updateCO2Preview();
+    }
+
+    // ── SLIDER UPDATER ──
+    function updateSlider(id, val, unit) {
+      const labels = {
+        km:    `${val} km`,
+        meals: `${val} meal${val>1?'s':''}`,
+        elec:  `${val} kWh`,
+        groc:  `${val} kg`,
+      };
+      document.getElementById(`${id}Val`).textContent =
+        labels[id] || `${val} ${unit}`;
+    }
+
+    // ── TOGGLE ITEM ──
+    function toggleItem(id, checked) {
+      document.getElementById(id).classList
+        .toggle('checked', checked);
+    }
+
+    // ── CO2 PREVIEW ──
+    function updateCO2Preview() {
+      const ef = {
+        car:0.21, motorcycle:0.11, bus:0.089,
+        train:0.041, flight:0.255, walk:0, cycle:0, none:0,
+        beef:3.0, chicken:0.9, fish:0.7,
+        vegetarian:0.4, vegan:0.2,
+      };
+
+      // Transport
+      const tCO2 = (ef[logData.transportMode]||0.21) *
+        (logData.transportKm||0);
+
+      // Food
+      const fCO2 = (ef[logData.foodType]||0.4) *
+        (logData.meals||3);
+
+      // Energy
+      let eCO2 = (logData.electricityKwh||0) * 0.82;
+      if (logData.usedAC)    eCO2 += 3.2;
+      if (logData.usedSolar) eCO2 *= 0.2;
+
+      // Shopping
+      let sCO2 = (logData.groceriesKg||0) * 0.5;
+      if (logData.boughtClothing)    sCO2 += 10;
+      if (logData.boughtElectronics) sCO2 += 70;
+      if (logData.onlineDelivery)    sCO2 += 0.5;
+
+      // Update displays
+      const setSection = (id, val, barId) => {
+        document.getElementById(id).textContent = val.toFixed(1);
+        const pct = Math.min((val / 12.9) * 100, 100);
+        document.getElementById(barId).style.width = pct + '%';
+      };
+
+      setSection('transport-co2', tCO2, 'transport-bar');
+      setSection('food-co2',      fCO2, 'food-bar');
+      setSection('energy-co2',    eCO2, 'energy-bar');
+      setSection('shopping-co2',  sCO2, 'shopping-bar');
+    }
+
+    // ── NAVIGATION ──
+    function nextSection() {
+      if (currentSection < totalSections - 1) {
+        goToSection(currentSection + 1);
+      }
+    }
+
+    function prevSection() {
+      if (currentSection > 0) {
+        goToSection(currentSection - 1);
+      }
+    }
+
+    function goToSection(idx) {
+      // Update sections
+      document.getElementById(`section-${currentSection}`)
+        .classList.remove('active');
+      document.getElementById(`section-${idx}`)
+        .classList.add('active');
+
+      // Update step indicators
+      document.getElementById(`step-ind-${currentSection}`)
+        .classList.remove('active');
+      document.getElementById(`step-ind-${currentSection}`)
+        .classList.add('done');
+      document.getElementById(`step-ind-${idx}`)
+        .classList.add('active');
+
+      // Update connectors
+      if (idx > currentSection) {
+        document.getElementById(`conn-${currentSection}`)
+          .classList.add('done');
+      } else {
+        document.getElementById(`conn-${idx}`)
+          .classList.remove('done');
+        document.getElementById(`step-ind-${currentSection}`)
+          .classList.remove('done');
+      }
+
+      currentSection = idx;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ── SUBMIT ──
+    function submitLog() {
+      // Add AC energy
+      if (logData.usedAC) logData.electricityKwh += 4;
+
+      const result = saveDailyLog(logData);
+      const carbon = result.carbon;
+
+      // Show success
+      document.getElementById(`section-${currentSection}`)
+        .classList.remove('active');
+      document.getElementById(`step-ind-${currentSection}`)
+        .classList.add('done');
+      document.getElementById(`conn-${currentSection}`)
+        .classList.add('done');
+      document.getElementById('step-ind-4').classList.add('done');
+
+      const successDiv = document.getElementById('logSuccess');
+      successDiv.classList.add('show');
+
+      // Score display
+      document.getElementById('successScore').textContent =
+        carbon.toFixed(1);
+
+      // Globe emoji based on score
+      let globe = '🌍';
+      if (carbon < 3)       globe = '🌳';
+      else if (carbon < 7)  globe = '🌍';
+      else if (carbon < 15) globe = '🌫️';
+      else                   globe = '🔴';
+      document.getElementById('successGlobe').textContent = globe;
+
+      // Message
+      let msg = '';
+      if (carbon < 3) {
+        msg = '🌟 Outstanding! You\'re a true eco champion today. Your Earth is thriving!';
+      } else if (carbon < 7) {
+        msg = '✅ Great job! You\'re well below the global average. Keep it up!';
+      } else if (carbon < 12.9) {
+        msg = '👍 Good effort! You\'re below the global average of 12.9 kg. Small changes can get you even lower!';
+      } else {
+        msg = '⚠️ Today was a high carbon day. Check your AI insights for tips to reduce tomorrow!';
+      }
+      document.getElementById('successMessage').textContent = msg;
+
+      // Eco fact
+      renderFactCard('factAfterLog');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast('🌍 Daily log saved! Great work!', 'success');
+    }
+
+    // Init preview
+    updateCO2Preview();
+  </script>
+</body>
+</html>

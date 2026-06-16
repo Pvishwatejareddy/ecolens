@@ -3,7 +3,8 @@
    ============================================ */
 
    (function () {
-    const canvas = document.getElementById('globe-canvas');
+    const canvas = document.getElementById('globe-canvas') || 
+               document.getElementById('dash-globe');
     if (!canvas) return;
   
     // ── SCENE SETUP ──
@@ -24,7 +25,7 @@
       0.1,
       1000
     );
-    camera.position.z = 2.8;
+    camera.position.z = 2.4;
   
     // ── TEXTURE LOADER ──
     const loader = new THREE.TextureLoader();
