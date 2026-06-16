@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoLens — Welcome</title>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+  <style>
+    body {
+      background: var(--cream);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── TOP BAR ── */
+    .ob-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 5%;
+    }
+
+    .ob-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--moss-dark);
+    }
+
+    .ob-logo span { color: var(--sienna); font-style: italic; }
+
+    .ob-skip {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--moss);
+      opacity: 0.6;
+      cursor: pointer;
+      transition: opacity 0.3s;
+      background: none;
+      border: none;
+    }
+
+    .ob-skip:hover { opacity: 1; }
+
+    /* ── PROGRESS BAR ── */
+    .ob-progress {
+      padding: 0 5%;
+      margin-bottom: 8px;
+    }
+
+    .ob-progress-track {
+      height: 4px;
+      background: var(--parchment);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .ob-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--moss), var(--amber));
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+
+    /* ── SLIDES CONTAINER ── */
+    .ob-slides {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ob-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 5%;
+      text-align: center;
+      opacity: 0;
+      transform: translateX(60px);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+
+    .ob-slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: all;
+    }
+
+    .ob-slide.exit {
+      opacity: 0;
+      transform: translateX(-60px);
+    }
+
+    /* ── ILLUSTRATION ── */
+    .ob-illustration {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 40px;
+      position: relative;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .ob-illustration .main-emoji {
+      font-size: 5rem;
+      z-index: 2;
+      position: relative;
+    }
+
+    .ob-illustration::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      opacity: 0.15;
+    }
+
+    .ob-illustration::after {
+      content: '';
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 2px dashed;
+      opacity: 0.2;
+      animation: spin 20s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* Slide specific colors */
+    .slide-1 .ob-illustration { background: rgba(82,183,136,0.12); }
+    .slide-1 .ob-illustration::before { background: var(--sage); }
+    .slide-1 .ob-illustration::after  { border-color: var(--sage); }
+
+    .slide-2 .ob-illustration { background: rgba(96,108,56,0.1); }
+    .slide-2 .ob-illustration::before { background: var(--moss); }
+    .slide-2 .ob-illustration::after  { border-color: var(--moss); }
+
+    .slide-3 .ob-illustration { background: rgba(221,161,94,0.12); }
+    .slide-3 .ob-illustration::before { background: var(--amber); }
+    .slide-3 .ob-illustration::after  { border-color: var(--amber); }
+
+    .slide-4 .ob-illustration { background: rgba(72,202,228,0.12); }
+    .slide-4 .ob-illustration::before { background: var(--sky); }
+    .slide-4 .ob-illustration::after  { border-color: var(--sky); }
+
+    .slide-5 .ob-illustration { background: rgba(188,108,37,0.1); }
+    .slide-5 .ob-illustration::before { background: var(--sienna); }
+    .slide-5 .ob-illustration::after  { border-color: var(--sienna); }
+
+    /* ── SLIDE TEXT ── */
+    .ob-step-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--sienna);
+      margin-bottom: 16px;
+    }
+
+    .ob-slide h2 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      margin-bottom: 20px;
+      line-height: 1.15;
+    }
+
+    .ob-slide h2 em {
+      color: var(--moss);
+      font-style: italic;
+    }
+
+    .ob-slide p {
+      font-size: 1rem;
+      max-width: 440px;
+      margin: 0 auto;
+      opacity: 0.72;
+      line-height: 1.8;
+    }
+
+    /* ── MINI FEATURES (slide cards) ── */
+    .ob-mini-features {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .ob-mini-feat {
+      background: var(--parchment);
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--moss-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(96,108,56,0.1);
+    }
+
+    /* ── DOTS ── */
+    .ob-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 0;
+    }
+
+    .ob-dot {
+      height: 8px;
+      border-radius: 4px;
+      background: var(--parchment);
+      border: 2px solid rgba(96,108,56,0.2);
+      cursor: pointer;
+      transition: all 0.4s ease;
+      width: 8px;
+    }
+
+    .ob-dot.active {
+      background: var(--moss);
+      border-color: var(--moss);
+      width: 28px;
+    }
+
+    /* ── BOTTOM ACTIONS ── */
+    .ob-actions {
+      padding: 20px 5% 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .ob-back {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--parchment);
+      border: 2px solid rgba(96,108,56,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .ob-back:hover {
+      background: var(--moss);
+      color: white;
+      border-color: var(--moss);
+    }
+
+    .ob-next {
+      flex: 1;
+      padding: 16px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--moss), var(--moss-dark));
+      color: var(--cream);
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(96,108,56,0.35);
+    }
+
+    .ob-next:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(96,108,56,0.45);
+    }
+
+    .ob-next.final {
+      background: linear-gradient(135deg, var(--amber), var(--sienna));
+      box-shadow: 0 4px 20px rgba(188,108,37,0.35);
+    }
+
+    /* ── ECO FACT BOX ── */
+    .ob-eco-fact {
+      margin: 20px auto 0;
+      max-width: 420px;
+      background: linear-gradient(135deg, var(--moss-dark), var(--moss));
+      color: var(--cream);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .ob-eco-fact .fact-icon { font-size: 1.4rem; flex-shrink: 0; }
+
+    .ob-eco-fact .fact-content .fact-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 4px;
+    }
+
+    .ob-eco-fact .fact-content p {
+      font-size: 0.82rem;
+      color: rgba(254,250,224,0.88);
+      opacity: 1;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 480px) {
+      .ob-illustration {
+        width: 170px;
+        height: 170px;
+      }
+      .ob-illustration .main-emoji { font-size: 3.8rem; }
+      .ob-slide h2 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="ob-topbar">
+    <div class="ob-logo">Eco<span>Lens</span></div>
+    <button class="ob-skip" onclick="skipOnboarding()">Skip →</button>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="ob-progress">
+    <div class="ob-progress-track">
+      <div class="ob-progress-fill" id="progressFill" style="width:20%"></div>
+    </div>
+  </div>
+
+  <!-- SLIDES -->
+  <div class="ob-slides">
+
+    <!-- SLIDE 1 -->
+    <div class="ob-slide slide-1 active">
+      <div class="ob-illustration">
+        <span class="main-emoji">🌍</span>
+      </div>
+      <div class="ob-step-label">Step 1 of 5</div>
+      <h2>Watch Your <em>Earth</em> Change</h2>
+      <p>
+        Your personal 3D Earth globe reacts in real time to your
+        daily carbon score. Green means you're thriving.
+        Red means it's time to act.
+      </p>
+      <div class="ob-mini-features">
+        <div class="ob-mini-feat">🟢 Low carbon = Green Earth</div>
+        <div class="ob-mini-feat">🔴 High carbon = Red alert</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="ob-slide slide-2">
+      <div class="ob-illustration">
+        <span class="main-emoji">📝</span>
+      </div>
+      <div class="ob-step-label">Step 2 of 5</div>
+      <h2>Log Your Day in <em>2 Minutes</em></h2>
+      <p>
+        Tell us how you traveled, what you ate, how much
+        energy you used, and what you bought.
+        Simple sliders — no complicated inputs.
+      </p>
+      <div class="ob-eco-fact">
+        <div class="fact-icon">🌿</div>
+        <div class="fact-content">
+          <div class="fact-label">Eco Fact</div>
+          <p>Daily choices account for 45% of your total carbon footprint</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="ob-slide slide-3">
+      <div class="ob-illustration">
+        <span class="main-emoji">🤖</span>
+      </div>
+      <div class="ob-step-label">Step 3 of 5</div>
+      <h2>Get <em>AI-Powered</em> Insights</h2>
+      <p>
+        Our Gemini AI analyzes your habits and gives you
+        3 personalized tips that actually fit your lifestyle,
+        budget, and location.
+      </p>
+      <div class="ob-mini-features">
+        <div class="ob-mini-feat">⚡ Instant analysis</div>
+        <div class="ob-mini-feat">🎯 Personalized tips</div>
+        <div class="ob-mini-feat">📍 Location-aware</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="ob-slide slide-4">
+      <div class="ob-illustration">
+        <span class="main-emoji">📈</span>
+      </div>
+      <div class="ob-step-label">Step 4 of 5</div>
+      <h2>Track Your <em>Progress</em> Over Time</h2>
+      <p>
+        Beautiful charts show your weekly and monthly carbon
+        trends. See exactly where your emissions come from
+        and celebrate your improvements.
+      </p>
+      <div class="ob-eco-fact">
+        <div class="fact-icon">💡</div>
+        <div class="fact-content">
+          <div class="fact-label">Did You Know?</div>
+          <p>People who track their habits reduce emissions by up to 30% in 3 months</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="ob-slide slide-5">
+      <div class="ob-illustration">
+        <span class="main-emoji">🏅</span>
+      </div>
+      <div class="ob-step-label">Step 5 of 5</div>
+      <h2>Earn Badges & <em>Stay Motivated</em></h2>
+      <p>
+        Hit streaks, reach milestones, and unlock beautiful
+        eco-badges. Make sustainability a daily habit —
+        not a chore.
+      </p>
+      <div class="ob-mini-features">
+        <div class="ob-mini-feat">🔥 Daily streaks</div>
+        <div class="ob-mini-feat">🌱 Eco milestones</div>
+        <div class="ob-mini-feat">💎 Elite badges</div>
+        <div class="ob-mini-feat">👑 Leaderboard</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DOTS -->
+  <div class="ob-dots">
+    <div class="ob-dot active" onclick="goToSlide(0)"></div>
+    <div class="ob-dot" onclick="goToSlide(1)"></div>
+    <div class="ob-dot" onclick="goToSlide(2)"></div>
+    <div class="ob-dot" onclick="goToSlide(3)"></div>
+    <div class="ob-dot" onclick="goToSlide(4)"></div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="ob-actions">
+    <button class="ob-back" id="backBtn" onclick="prevSlide()"
+      style="opacity:0; pointer-events:none;">←</button>
+    <button class="ob-next" id="nextBtn" onclick="nextSlide()">
+      Let's Go &nbsp; →
+    </button>
+  </div>
+
+  <script>
+    let current = 0;
+    const total  = 5;
+    const slides = document.querySelectorAll('.ob-slide');
+    const dots   = document.querySelectorAll('.ob-dot');
+    const fill   = document.getElementById('progressFill');
+    const nextBtn = document.getElementById('nextBtn');
+    const backBtn = document.getElementById('backBtn');
+
+    const nextLabels = [
+      'Let\'s Go &nbsp; →',
+      'Next &nbsp; →',
+      'Next &nbsp; →',
+      'Next &nbsp; →',
+      '🌱 Create My Account',
+    ];
+
+    function goToSlide(index) {
+      slides[current].classList.remove('active');
+      slides[current].classList.add('exit');
+      setTimeout(() => slides[current < index ? current : current]
+        .classList.remove('exit'), 500);
+
+      current = index;
+
+      slides.forEach((s, i) => {
+        s.classList.remove('active', 'exit');
+        if (i === current) s.classList.add('active');
+      });
+
+      dots.forEach((d, i) => {
+        d.classList.toggle('active', i === current);
+      });
+
+      fill.style.width = ((current + 1) / total * 100) + '%';
+      nextBtn.innerHTML = nextLabels[current];
+      nextBtn.className = 'ob-next' + (current === total - 1 ? ' final' : '');
+
+      backBtn.style.opacity        = current === 0 ? '0' : '1';
+      backBtn.style.pointerEvents  = current === 0 ? 'none' : 'all';
+    }
+
+    function nextSlide() {
+      if (current < total - 1) {
+        goToSlide(current + 1);
+      } else {
+        // Mark onboarding done & go to signup
+        localStorage.setItem('ecolens_onboarded', 'true');
+        window.location.href = 'signup.html';
+      }
+    }
+
+    function prevSlide() {
+      if (current > 0) goToSlide(current - 1);
+    }
+
+    function skipOnboarding() {
+      localStorage.setItem('ecolens_onboarded', 'true');
+      window.location.href = 'signup.html';
+    }
+
+    // Swipe support
+    let touchStartX = 0;
+    document.querySelector('.ob-slides').addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+    });
+    document.querySelector('.ob-slides').addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        diff > 0 ? nextSlide() : prevSlide();
+      }
+    });
+
+    // Keyboard support
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft')  prevSlide();
+    });
+  </script>
+</body>
+</html>
