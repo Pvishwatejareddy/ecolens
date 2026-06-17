@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoLens — History</title>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+  <style>
+    body { background: var(--cream); }
+
+    .history-page {
+      padding: 100px 5% 80px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* ── HEADER ── */
+    .history-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .history-header .eyebrow {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--sienna);
+      margin-bottom: 12px;
+    }
+
+    .history-header h1 em { color: var(--moss); font-style: italic; }
+    .history-header p { opacity: 0.65; max-width: 480px; margin: 0 auto; }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .strip-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(96,108,56,0.06);
+    }
+
+    .strip-card .sc-icon { font-size: 1.4rem; margin-bottom: 8px; }
+    .strip-card .sc-val {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--moss-dark);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .strip-card .sc-lbl {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--moss);
+      opacity: 0.6;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── CHART TABS ── */
+    .chart-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      background: var(--parchment);
+      padding: 6px;
+      border-radius: var(--radius-full);
+      width: fit-content;
+    }
+
+    .chart-tab {
+      padding: 8px 24px;
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--moss-dark);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      background: none;
+      opacity: 0.6;
+    }
+
+    .chart-tab.active {
+      background: var(--white);
+      color: var(--moss);
+      opacity: 1;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ── MAIN CHART ── */
+    .main-chart-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(96,108,56,0.06);
+      margin-bottom: 28px;
+    }
+
+    .chart-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .chart-card-header h3 { font-size: 1.1rem; }
+
+    .chart-legend {
+      display: flex;
+      gap: 16px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--moss-dark);
+      opacity: 0.65;
+    }
+
+    .legend-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+
+    /* ── BREAKDOWN CHART ── */
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .breakdown-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(96,108,56,0.06);
+    }
+
+    .breakdown-card h3 {
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    /* ── LOG TABLE ── */
+    .log-table-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(96,108,56,0.06);
+    }
+
+    .log-table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .log-table-header h3 { font-size: 1rem; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--moss);
+      opacity: 0.6;
+      padding: 10px 16px;
+      text-align: left;
+      border-bottom: 2px solid var(--parchment);
+    }
+
+    tbody tr {
+      transition: background 0.2s ease;
+      border-bottom: 1px solid rgba(96,108,56,0.05);
+    }
+
+    tbody tr:hover { background: rgba(96,108,56,0.03); }
+
+    tbody td {
+      padding: 14px 16px;
+      font-size: 0.88rem;
+      color: var(--moss-dark);
+    }
+
+    .td-score {
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    .td-score.low    { color: var(--sage); }
+    .td-score.medium { color: var(--amber); }
+    .td-score.high   { color: var(--coral); }
+
+    .td-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .td-badge.low {
+      background: rgba(82,183,136,0.1);
+      color: var(--sage);
+    }
+
+    .td-badge.medium {
+      background: rgba(221,161,94,0.12);
+      color: var(--amber);
+    }
+
+    .td-badge.high {
+      background: rgba(230,57,70,0.1);
+      color: var(--coral);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px;
+      opacity: 0.5;
+    }
+
+    .empty-state .es-icon { font-size: 3rem; margin-bottom: 16px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .stats-strip    { grid-template-columns: repeat(2,1fr); }
+      .breakdown-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">Eco<span>Lens</span></div>
+    <ul class="nav-links">
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="log.html">Log Day</a></li>
+      <li><a href="insights.html">Insights</a></li>
+      <li><a href="history.html" class="active">History</a></li>
+      <li><a href="badges.html">Badges</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="nav-streak">🔥<span class="nav-streak-count">0</span></div>
+      <div class="nav-avatar"
+        onclick="window.location.href='profile.html'">🌱</div>
+    </div>
+  </nav>
+
+  <!-- MOBILE NAV -->
+  <nav class="mobile-nav">
+    <ul>
+      <li><a href="dashboard.html"><span class="nav-icon">🏠</span>Home</a></li>
+      <li><a href="log.html"><span class="nav-icon">📝</span>Log</a></li>
+      <li><a href="insights.html"><span class="nav-icon">🤖</span>AI</a></li>
+      <li><a href="history.html" class="active"><span class="nav-icon">📈</span>History</a></li>
+      <li><a href="badges.html"><span class="nav-icon">🏅</span>Badges</a></li>
+    </ul>
+  </nav>
+
+  <div class="history-page">
+
+    <!-- HEADER -->
+    <div class="history-header animate-fadeUp">
+      <div class="eyebrow">📈 Your Journey</div>
+      <h1>Carbon <em>History</em></h1>
+      <p>Track your progress over time and celebrate your improvements</p>
+    </div>
+
+    <!-- STATS STRIP -->
+    <div class="stats-strip animate-fadeUp delay-1">
+      <div class="strip-card">
+        <div class="sc-icon">📅</div>
+        <div class="sc-val" id="totalDaysLogged">0</div>
+        <div class="sc-lbl">Days Logged</div>
+      </div>
+      <div class="strip-card">
+        <div class="sc-icon">⚖️</div>
+        <div class="sc-val" id="avgCarbonAll">—</div>
+        <div class="sc-lbl">Avg kg CO₂/day</div>
+      </div>
+      <div class="strip-card">
+        <div class="sc-icon">🏆</div>
+        <div class="sc-val" id="bestDay">—</div>
+        <div class="sc-lbl">Best Day</div>
+      </div>
+      <div class="strip-card">
+        <div class="sc-icon">📉</div>
+        <div class="sc-val" id="totalSaved">—</div>
+        <div class="sc-lbl">kg Below Global Avg</div>
+      </div>
+    </div>
+
+    <!-- CHART TABS -->
+    <div class="chart-tabs animate-fadeUp delay-2">
+      <button class="chart-tab active"
+        onclick="switchTab('week',this)">7 Days</button>
+      <button class="chart-tab"
+        onclick="switchTab('month',this)">30 Days</button>
+      <button class="chart-tab"
+        onclick="switchTab('all',this)">All Time</button>
+    </div>
+
+    <!-- MAIN CHART -->
+    <div class="main-chart-card animate-fadeUp delay-2">
+      <div class="chart-card-header">
+        <h3>📊 Carbon Trend</h3>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-dot"
+              style="background:var(--moss)"></div>
+            Your CO₂
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot"
+              style="background:var(--coral)"></div>
+            Global avg
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot"
+              style="background:var(--amber)"></div>
+            India avg
+          </div>
+        </div>
+      </div>
+      <canvas id="trendChart" height="220"></canvas>
+    </div>
+
+    <!-- BREAKDOWN -->
+    <div class="breakdown-grid animate-fadeUp delay-3">
+      <div class="breakdown-card">
+        <h3>🍕 Emissions by Category</h3>
+        <canvas id="donutChart" height="200"></canvas>
+      </div>
+      <div class="breakdown-card">
+        <h3>📅 Daily Distribution</h3>
+        <canvas id="barChart" height="200"></canvas>
+      </div>
+    </div>
+
+    <!-- LOG TABLE -->
+    <div class="log-table-card animate-fadeUp delay-4">
+      <div class="log-table-header">
+        <h3>🗓️ All Logs</h3>
+        <span style="font-size:0.8rem;opacity:0.5;">
+          Most recent first
+        </span>
+      </div>
+
+      <div id="tableContainer">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Transport</th>
+              <th>Food</th>
+              <th>Energy</th>
+              <th>Total CO₂</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="logTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    const user = requireLogin();
+    let trendChartInstance = null;
+    let allLogs = [];
+
+    window.addEventListener('DOMContentLoaded', () => {
+      populateNav();
+      allLogs = getUserLogs(90);
+      initStats();
+      renderTrendChart(7);
+      renderDonutChart();
+      renderBarChart();
+      renderTable();
+    });
+
+    function initStats() {
+      document.getElementById('totalDaysLogged').textContent =
+        allLogs.length;
+
+      if (allLogs.length === 0) return;
+
+      const avg = allLogs.reduce((s,l) => s + l.carbon, 0)
+        / allLogs.length;
+      document.getElementById('avgCarbonAll').textContent =
+        avg.toFixed(1);
+
+      const best = Math.min(...allLogs.map(l => l.carbon));
+      document.getElementById('bestDay').textContent =
+        best.toFixed(1) + ' kg';
+
+      const saved = allLogs.reduce((s,l) =>
+        s + Math.max(0, 12.9 - l.carbon), 0);
+      document.getElementById('totalSaved').textContent =
+        saved.toFixed(0);
+    }
+
+    function switchTab(period, el) {
+      document.querySelectorAll('.chart-tab')
+        .forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      const days = period === 'week' ? 7
+                 : period === 'month' ? 30 : 90;
+      renderTrendChart(days);
+    }
+
+    function renderTrendChart(days) {
+      const logs = getUserLogs(days);
+      const labels = Array.from({length: days}, (_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - (days - 1 - i));
+        return d.toLocaleDateString('en-IN',
+          { month: 'short', day: 'numeric' });
+      });
+
+      const data = labels.map((_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - (days - 1 - i));
+        const log = logs.find(l => l.date === d.toDateString());
+        return log ? log.carbon : null;
+      });
+
+      if (trendChartInstance) trendChartInstance.destroy();
+
+      const ctx = document.getElementById('trendChart')
+        .getContext('2d');
+      trendChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Your CO₂',
+              data,
+              borderColor:     '#606C38',
+              backgroundColor: 'rgba(96,108,56,0.08)',
+              borderWidth:     2.5,
+              pointBackgroundColor: '#606C38',
+              pointRadius:     4,
+              tension:         0.4,
+              fill:            true,
+              spanGaps:        true,
+            },
+            {
+              label: 'Global avg',
+              data: Array(days).fill(12.9),
+              borderColor: '#E63946',
+              borderWidth: 1.5,
+              borderDash:  [6,4],
+              pointRadius: 0,
+              fill:        false,
+            },
+            {
+              label: 'India avg',
+              data: Array(days).fill(5.2),
+              borderColor: '#DDA15E',
+              borderWidth: 1.5,
+              borderDash:  [4,3],
+              pointRadius: 0,
+              fill:        false,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#283618',
+              titleColor:      '#FEFAE0',
+              bodyColor:       'rgba(254,250,224,0.8)',
+              padding:         12,
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid:  { color: 'rgba(96,108,56,0.06)' },
+              ticks: {
+                color:    '#606C38',
+                callback: v => v + ' kg',
+              },
+            },
+            x: {
+              grid:  { display: false },
+              ticks: {
+                color:     '#606C38',
+                maxTicksLimit: 8,
+                font: { size: 10 },
+              },
+            },
+          },
+        },
+      });
+    }
+
+    function renderDonutChart() {
+      if (allLogs.length === 0) return;
+
+      const ef = {
+        car:0.21,motorcycle:0.11,bus:0.089,
+        train:0.041,flight:0.255,walk:0,cycle:0,none:0,
+        beef:3.0,chicken:0.9,fish:0.7,
+        vegetarian:0.4,vegan:0.2,
+      };
+
+      let transport = 0, food = 0, energy = 0, shopping = 0;
+
+      allLogs.forEach(l => {
+        transport += (ef[l.transportMode]||0.21)*(l.transportKm||0);
+        food      += (ef[l.foodType]||0.4)*(l.meals||3);
+        energy    += (l.electricityKwh||0)*0.82;
+        shopping  += (l.groceriesKg||0)*0.5 +
+          (l.boughtClothing?10:0) +
+          (l.boughtElectronics?70:0);
+      });
+
+      const ctx = document.getElementById('donutChart')
+        .getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Transport','Food','Energy','Shopping'],
+          datasets: [{
+            data: [
+              transport.toFixed(1),
+              food.toFixed(1),
+              energy.toFixed(1),
+              shopping.toFixed(1),
+            ],
+            backgroundColor: [
+              '#48CAE4','#52B788','#DDA15E','#BC6C25',
+            ],
+            borderWidth: 0,
+            hoverOffset: 8,
+          }],
+        },
+        options: {
+          responsive: true,
+          cutout: '65%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color:   '#283618',
+                padding: 16,
+                font:    { size: 11, weight: '600' },
+              },
+            },
+          },
+        },
+      });
+    }
+
+    function renderBarChart() {
+      const logs = getUserLogs(7);
+      const labels = Array.from({length:7}, (_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - (6-i));
+        return d.toLocaleDateString('en-IN',
+          {weekday:'short'});
+      });
+
+      const data = labels.map((_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - (6-i));
+        const log = logs.find(l => l.date === d.toDateString());
+        return log ? log.carbon : 0;
+      });
+
+      const colors = data.map(v =>
+        v < 5  ? '#52B788' :
+        v < 10 ? '#DDA15E' : '#E63946'
+      );
+
+      const ctx = document.getElementById('barChart')
+        .getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'CO₂ kg',
+            data,
+            backgroundColor: colors,
+            borderRadius:    8,
+            borderSkipped:   false,
+          }],
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(96,108,56,0.06)' },
+              ticks: {
+                color:    '#606C38',
+                callback: v => v + ' kg',
+              },
+            },
+            x: {
+              grid:  { display: false },
+              ticks: { color: '#606C38' },
+            },
+          },
+        },
+      });
+    }
+
+    function renderTable() {
+      const logs    = [...allLogs].reverse();
+      const tbody   = document.getElementById('logTableBody');
+
+      if (logs.length === 0) {
+        tbody.innerHTML = `
+          <tr><td colspan="6">
+            <div class="empty-state">
+              <div class="es-icon">📭</div>
+              <p>No logs yet. Start logging your day!</p>
+            </div>
+          </td></tr>`;
+        return;
+      }
+
+      const ef = {
+        car:0.21,motorcycle:0.11,bus:0.089,
+        train:0.041,flight:0.255,walk:0,cycle:0,none:0,
+        beef:3.0,chicken:0.9,fish:0.7,
+        vegetarian:0.4,vegan:0.2,
+      };
+
+      tbody.innerHTML = logs.map(l => {
+        const tCO2 = ((ef[l.transportMode]||0.21)*
+          (l.transportKm||0)).toFixed(1);
+        const fCO2 = ((ef[l.foodType]||0.4)*
+          (l.meals||3)).toFixed(1);
+        const eCO2 = ((l.electricityKwh||0)*0.82).toFixed(1);
+        const cls  = l.carbon < 5 ? 'low'
+                   : l.carbon < 10 ? 'medium' : 'high';
+        const lbl  = l.carbon < 5 ? '🌟 Great'
+                   : l.carbon < 10 ? '👍 Good' : '⚠️ High';
+        return `
+          <tr>
+            <td>${new Date(l.date).toLocaleDateString(
+              'en-IN',{day:'numeric',month:'short'})}</td>
+            <td>${l.transportMode||'—'} · ${l.transportKm||0}km</td>
+            <td>${l.foodType||'—'}</td>
+            <td>${eCO2} kg</td>
+            <td class="td-score ${cls}">${l.carbon} kg</td>
+            <td><span class="td-badge ${cls}">${lbl}</span></td>
+          </tr>`;
+      }).join('');
+    }
+  </script>
+</body>
+</html>

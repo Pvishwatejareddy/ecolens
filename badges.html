@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoLens — Badges</title>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+  <style>
+    body { background: var(--cream); }
+
+    .badges-page {
+      padding: 100px 5% 80px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* ── HEADER ── */
+    .badges-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .badges-header .eyebrow {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--sienna);
+      margin-bottom: 12px;
+    }
+
+    .badges-header h1 em { color: var(--moss); font-style: italic; }
+    .badges-header p {
+      opacity: 0.65;
+      max-width: 480px;
+      margin: 12px auto 0;
+    }
+
+    /* ── PROGRESS BANNER ── */
+    .progress-banner {
+      background: linear-gradient(135deg,
+        var(--moss-dark), var(--moss));
+      border-radius: var(--radius-lg);
+      padding: 28px 36px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-banner::after {
+      content: '🏅';
+      position: absolute;
+      font-size: 8rem;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.08;
+    }
+
+    .pb-emoji {
+      font-size: 3rem;
+      flex-shrink: 0;
+    }
+
+    .pb-info h3 {
+      color: var(--cream);
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+
+    .pb-info p {
+      color: rgba(254,250,224,0.65);
+      font-size: 0.85rem;
+      margin-bottom: 14px;
+    }
+
+    .pb-bar-track {
+      height: 8px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 4px;
+      width: 280px;
+      overflow: hidden;
+    }
+
+    .pb-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--amber), var(--sage));
+      border-radius: 4px;
+      transition: width 1s ease;
+    }
+
+    .pb-count {
+      margin-left: auto;
+      text-align: center;
+      flex-shrink: 0;
+      z-index: 2;
+    }
+
+    .pb-count .num {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--cream);
+      line-height: 1;
+    }
+
+    .pb-count .lbl {
+      font-size: 0.72rem;
+      color: rgba(254,250,224,0.6);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ── CATEGORY SECTION ── */
+    .badge-category {
+      margin-bottom: 40px;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid rgba(96,108,56,0.08);
+    }
+
+    .category-icon {
+      width: 40px; height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .category-header h3 { font-size: 1rem; }
+
+    .category-count {
+      margin-left: auto;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--moss);
+      opacity: 0.6;
+    }
+
+    /* ── BADGE GRID ── */
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .badge-item {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px 16px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .badge-item.earned {
+      border-color: rgba(96,108,56,0.15);
+    }
+
+    .badge-item.earned:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--moss);
+    }
+
+    .badge-item.locked {
+      opacity: 0.5;
+      filter: grayscale(0.8);
+    }
+
+    .badge-item .bi-circle {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease;
+    }
+
+    .badge-item.earned .bi-circle:hover {
+      transform: scale(1.12) rotate(8deg);
+    }
+
+    .badge-item .bi-name {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--moss-dark);
+      margin-bottom: 6px;
+    }
+
+    .badge-item .bi-desc {
+      font-size: 0.72rem;
+      color: var(--moss);
+      opacity: 0.65;
+      line-height: 1.4;
+    }
+
+    .badge-item .bi-earned-tag {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: var(--sage);
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      letter-spacing: 0.5px;
+    }
+
+    .badge-item .bi-lock {
+      position: absolute;
+      top: 10px; right: 10px;
+      font-size: 0.9rem;
+      opacity: 0.4;
+    }
+
+    /* ── STREAK SECTION ── */
+    .streak-card-big {
+      background: linear-gradient(135deg, var(--amber), var(--sienna));
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      margin-bottom: 40px;
+      box-shadow: 0 8px 32px rgba(188,108,37,0.3);
+    }
+
+    .streak-card-big .flame-big {
+      font-size: 4rem;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    .streak-info h3 { color: white; font-size: 1.2rem; margin-bottom: 6px; }
+    .streak-info p  { color: rgba(255,255,255,0.7); font-size: 0.85rem; }
+
+    .streak-num-big {
+      margin-left: auto;
+      text-align: center;
+    }
+
+    .streak-num-big .sn {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      font-weight: 900;
+      color: white;
+      line-height: 1;
+    }
+
+    .streak-num-big .sl {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.65);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .badge-grid { grid-template-columns: repeat(2, 1fr); }
+      .progress-banner { flex-wrap: wrap; }
+      .pb-bar-track { width: 200px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">Eco<span>Lens</span></div>
+    <ul class="nav-links">
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="log.html">Log Day</a></li>
+      <li><a href="insights.html">Insights</a></li>
+      <li><a href="history.html">History</a></li>
+      <li><a href="badges.html" class="active">Badges</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="nav-streak">🔥<span class="nav-streak-count">0</span></div>
+      <div class="nav-avatar"
+        onclick="window.location.href='profile.html'">🌱</div>
+    </div>
+  </nav>
+
+  <!-- MOBILE NAV -->
+  <nav class="mobile-nav">
+    <ul>
+      <li><a href="dashboard.html"><span class="nav-icon">🏠</span>Home</a></li>
+      <li><a href="log.html"><span class="nav-icon">📝</span>Log</a></li>
+      <li><a href="insights.html"><span class="nav-icon">🤖</span>AI</a></li>
+      <li><a href="history.html"><span class="nav-icon">📈</span>History</a></li>
+      <li><a href="badges.html" class="active"><span class="nav-icon">🏅</span>Badges</a></li>
+    </ul>
+  </nav>
+
+  <div class="badges-page">
+
+    <!-- HEADER -->
+    <div class="badges-header animate-fadeUp">
+      <div class="eyebrow">🏅 Achievements</div>
+      <h1>Your <em>Eco Badges</em></h1>
+      <p>Earn badges by building sustainable habits.
+         Each badge represents real environmental impact!</p>
+    </div>
+
+    <!-- STREAK -->
+    <div class="streak-card-big animate-fadeUp delay-1">
+      <div class="flame-big">🔥</div>
+      <div class="streak-info">
+        <h3>Current Streak</h3>
+        <p>Log every day to keep your streak alive
+           and unlock exclusive badges!</p>
+      </div>
+      <div class="streak-num-big">
+        <div class="sn" id="streakBig">0</div>
+        <div class="sl">Day Streak</div>
+      </div>
+    </div>
+
+    <!-- PROGRESS BANNER -->
+    <div class="progress-banner animate-fadeUp delay-2">
+      <div class="pb-emoji">🌱</div>
+      <div class="pb-info">
+        <h3>Badge Collection Progress</h3>
+        <p id="progressText">
+          Earn more badges by logging daily and
+          reducing your footprint!
+        </p>
+        <div class="pb-bar-track">
+          <div class="pb-bar-fill" id="progressBarFill"
+            style="width:0%"></div>
+        </div>
+      </div>
+      <div class="pb-count">
+        <div class="num" id="earnedCount">0</div>
+        <div class="lbl">of 12 earned</div>
+      </div>
+    </div>
+
+    <!-- STREAK BADGES -->
+    <div class="badge-category animate-fadeUp delay-3">
+      <div class="category-header">
+        <div class="category-icon"
+          style="background:rgba(188,108,37,0.1)">🔥</div>
+        <h3>Streak Badges</h3>
+        <span class="category-count" id="streakCatCount">
+          0/4 earned
+        </span>
+      </div>
+      <div class="badge-grid" id="streakBadges"></div>
+    </div>
+
+    <!-- ACTIVITY BADGES -->
+    <div class="badge-category animate-fadeUp delay-4">
+      <div class="category-header">
+        <div class="category-icon"
+          style="background:rgba(82,183,136,0.1)">🌱</div>
+        <h3>Activity Badges</h3>
+        <span class="category-count" id="activityCatCount">
+          0/8 earned
+        </span>
+      </div>
+      <div class="badge-grid" id="activityBadges"></div>
+    </div>
+
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    const user = requireLogin();
+
+    const ALL_BADGES = {
+      streak: [
+        {
+          id:'streak_3', emoji:'⚡',
+          name:'Eco Spark', desc:'Log 3 days in a row',
+          color:'linear-gradient(135deg,#f4d03f,#e67e22)',
+        },
+        {
+          id:'streak_7', emoji:'🔥',
+          name:'Green Flame', desc:'Log 7 days in a row',
+          color:'linear-gradient(135deg,#DDA15E,#BC6C25)',
+        },
+        {
+          id:'streak_30', emoji:'👑',
+          name:'Forest Guardian', desc:'Log 30 days in a row',
+          color:'linear-gradient(135deg,#606C38,#283618)',
+        },
+        {
+          id:'streak_100', emoji:'💎',
+          name:'EcoLens Legend', desc:'Log 100 days in a row',
+          color:'linear-gradient(135deg,#a29bfe,#6c5ce7)',
+        },
+      ],
+      activity: [
+        {
+          id:'first_log', emoji:'🌱',
+          name:'First Breath', desc:'Log your very first day',
+          color:'linear-gradient(135deg,#52B788,#2D6A4F)',
+        },
+        {
+          id:'earth_watch', emoji:'🌍',
+          name:'Earth Watcher', desc:'Log 3 days total',
+          color:'linear-gradient(135deg,#48CAE4,#0096C7)',
+        },
+        {
+          id:'low_carbon', emoji:'🍃',
+          name:'Tiny Steps', desc:'Log a day under 5kg CO₂',
+          color:'linear-gradient(135deg,#95D5B2,#52B788)',
+        },
+        {
+          id:'plant_power', emoji:'🥗',
+          name:'Plant Powered', desc:'Log 7 vegetarian days',
+          color:'linear-gradient(135deg,#74C69D,#40916C)',
+        },
+        {
+          id:'pedal_hero', emoji:'🚲',
+          name:'Pedal Hero', desc:'Log 5 zero-drive days',
+          color:'linear-gradient(135deg,#fd79a8,#e84393)',
+        },
+        {
+          id:'sun_chaser', emoji:'☀️',
+          name:'Sun Chaser', desc:'Use solar/renewable energy',
+          color:'linear-gradient(135deg,#f9ca24,#f0932b)',
+        },
+        {
+          id:'neutral', emoji:'🌿',
+          name:'Carbon Neutral', desc:'Monthly avg under 3kg/day',
+          color:'linear-gradient(135deg,#6ab04c,#badc58)',
+        },
+        {
+          id:'sharer', emoji:'⭐',
+          name:'Climate Champion', desc:'Share your impact report',
+          color:'linear-gradient(135deg,#e17055,#d63031)',
+        },
+      ],
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      populateNav();
+
+      const earnedBadges = user.badges || ['🌱'];
+      document.getElementById('streakBig').textContent =
+        user.streak || 0;
+
+      const totalBadges = 12;
+      const earnedCount = earnedBadges.length;
+      document.getElementById('earnedCount').textContent =
+        earnedCount;
+      document.getElementById('progressBarFill').style.width =
+        (earnedCount / totalBadges * 100) + '%';
+      document.getElementById('progressText').textContent =
+        earnedCount === totalBadges
+          ? '🎉 You\'ve earned all badges! You\'re an EcoLens Legend!'
+          : `Keep going! ${totalBadges - earnedCount} more badges to collect.`;
+
+      renderBadgeGroup('streakBadges',
+        ALL_BADGES.streak, earnedBadges);
+      renderBadgeGroup('activityBadges',
+        ALL_BADGES.activity, earnedBadges);
+
+      // Category counts
+      const sc = ALL_BADGES.streak.filter(b =>
+        earnedBadges.includes(b.id)).length;
+      const ac = ALL_BADGES.activity.filter(b =>
+        earnedBadges.includes(b.id)).length;
+      document.getElementById('streakCatCount').textContent =
+        `${sc}/4 earned`;
+      document.getElementById('activityCatCount').textContent =
+        `${ac}/8 earned`;
+    });
+
+    function renderBadgeGroup(containerId, badges, earned) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = badges.map(b => {
+        const isEarned = earned.includes(b.id) ||
+          earned.includes(b.emoji);
+        return `
+          <div class="badge-item ${isEarned?'earned':'locked'}">
+            ${isEarned
+              ? '<div class="bi-earned-tag">✓ Earned</div>'
+              : '<div class="bi-lock">🔒</div>'}
+            <div class="bi-circle"
+              style="background:${isEarned
+                ? b.color : 'linear-gradient(135deg,#ccc,#aaa)'}">
+              ${b.emoji}
+            </div>
+            <div class="bi-name">${b.name}</div>
+            <div class="bi-desc">${b.desc}</div>
+          </div>`;
+      }).join('');
+    }
+  </script>
+</body>
+</html>
