@@ -628,6 +628,7 @@
     </div>
   </div>
 
+  <script src="js/config.js"></script>
   <script src="js/auth.js"></script>
   <script>
     const user = requireLogin();
@@ -709,7 +710,7 @@
     // ── GEMINI API CALL ──
     async function callGeminiAPI() {
       // ⚠️ REPLACE WITH YOUR ACTUAL KEY
-      const API_KEY = 'YOUR_API_KEY';
+      const API_KEY = CONFIG.GEMINI_API_KEY;
 
       const prompt = `
 You are EcoCoach, an expert sustainability advisor in EcoLens app.
