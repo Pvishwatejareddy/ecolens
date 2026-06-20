@@ -217,6 +217,7 @@ const EMISSION_FACTORS = {
   motorcycle: 0.11,
   bus:        0.089,
   train:      0.041,
+  electric:   0.05,
   flight:     0.255,
   walk:       0,
   cycle:      0,

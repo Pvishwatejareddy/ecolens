@@ -7,10 +7,8 @@
   <link rel="stylesheet" href="css/global.css"/>
   <link rel="stylesheet" href="css/components.css"/>
   <style>
-
     body { background: var(--cream); }
 
-    /* ── DASHBOARD GRID ── */
     .dashboard {
       padding: 100px 5% 60px;
       max-width: 1300px;
@@ -91,7 +89,8 @@
 
     /* ── GLOBE CARD ── */
     .globe-card {
-      background: linear-gradient(160deg, var(--moss-dark) 0%, #2d5a27 100%);
+      background: linear-gradient(160deg,
+        var(--moss-dark) 0%, #2d5a27 100%);
       border-radius: var(--radius-lg);
       padding: 36px;
       position: relative;
@@ -218,10 +217,7 @@
       border: 1px solid rgba(96,108,56,0.08);
     }
 
-    .score-info h4 {
-      font-size: 1rem;
-      margin-bottom: 6px;
-    }
+    .score-info h4 { font-size: 1rem; margin-bottom: 6px; }
 
     .score-info p {
       font-size: 0.82rem;
@@ -256,7 +252,8 @@
 
     /* ── STREAK CARD ── */
     .streak-card {
-      background: linear-gradient(135deg, var(--amber), var(--sienna));
+      background: linear-gradient(135deg,
+        var(--amber), var(--sienna));
       border-radius: var(--radius-lg);
       padding: 24px 28px;
       color: white;
@@ -311,7 +308,11 @@
       transform: translateY(-2px);
     }
 
-    .quick-log-card .ql-icon { font-size: 2.2rem; margin-bottom: 10px; }
+    .quick-log-card .ql-icon {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
     .quick-log-card h4 { font-size: 1rem; margin-bottom: 6px; }
     .quick-log-card p  { font-size: 0.82rem; opacity: 0.6; }
 
@@ -374,7 +375,6 @@
       gap: 28px;
     }
 
-    /* ── WEEKLY CHART CARD ── */
     .chart-card {
       background: var(--white);
       border-radius: var(--radius-lg);
@@ -392,10 +392,7 @@
 
     .card-header h3 { font-size: 1.1rem; }
 
-    .chart-legend {
-      display: flex;
-      gap: 16px;
-    }
+    .chart-legend { display: flex; gap: 16px; }
 
     .legend-item {
       display: flex;
@@ -412,7 +409,7 @@
       border-radius: 50%;
     }
 
-    /* ── RECENT BADGES ── */
+    /* ── BADGES CARD ── */
     .badges-card {
       background: var(--white);
       border-radius: var(--radius-lg);
@@ -463,12 +460,9 @@
       opacity: 0.35;
     }
 
-    /* ── FACT CARD ── */
-    .dash-fact {
-      margin-bottom: 28px;
-    }
+    /* ── FACT & NO LOG ── */
+    .dash-fact { margin-bottom: 28px; }
 
-    /* ── NO LOG STATE ── */
     .no-log-banner {
       background: linear-gradient(135deg,
         rgba(96,108,56,0.08), rgba(221,161,94,0.08));
@@ -485,20 +479,150 @@
       margin-bottom: 16px;
     }
 
+    /* ── CARBON WIDGET ── */
+    .carbon-widget {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      max-width: 280px;
+    }
+
+    .carbon-widget-card {
+      background: linear-gradient(135deg,
+        var(--moss-dark), var(--moss));
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 8px 32px rgba(40,54,24,0.25);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .carbon-widget-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(40,54,24,0.35);
+    }
+
+    .widget-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .widget-top-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .widget-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+
+    .widget-toggle {
+      color: rgba(254,250,224,0.6);
+      font-size: 0.8rem;
+      transition: transform 0.3s ease;
+    }
+
+    .widget-body p {
+      font-size: 0.82rem;
+      color: rgba(254,250,224,0.85);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .widget-why {
+      background: rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      color: rgba(254,250,224,0.75);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .widget-levels {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .wl-great {
+      background: rgba(82,183,136,0.2);
+      color: #52B788;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+
+    .wl-okay {
+      background: rgba(221,161,94,0.2);
+      color: var(--amber);
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+
+    .wl-high {
+      background: rgba(230,57,70,0.15);
+      color: #E63946;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
       .main-grid   { grid-template-columns: 1fr; }
-      .stats-row   { grid-template-columns: repeat(2, 1fr); }
+      .stats-row   { grid-template-columns: repeat(2,1fr); }
       .bottom-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 600px) {
-      .stats-row { grid-template-columns: repeat(2, 1fr); }
-      .dashboard { padding: 90px 4% 100px; }
+      .stats-row   { grid-template-columns: repeat(2,1fr); }
+      .dashboard   { padding: 90px 4% 100px; }
+      .carbon-widget { bottom: 80px; right: 16px; max-width: 240px; }
     }
   </style>
 </head>
 <body>
+
+  <!-- CARBON INFO WIDGET -->
+  <div class="carbon-widget">
+    <div class="carbon-widget-card" onclick="toggleWidget()">
+      <div class="widget-top">
+        <div class="widget-top-left">
+          <span style="font-size:1.2rem">🌍</span>
+          <span class="widget-title">What is Carbon Score?</span>
+        </div>
+        <span class="widget-toggle" id="widgetToggle">▼</span>
+      </div>
+      <div class="widget-body" id="widgetBody">
+        <p>
+          Your <strong style="color:var(--amber)">
+          Carbon Score</strong> is the total kg of CO₂
+          your daily activities release into the atmosphere.
+        </p>
+        <div class="widget-why">
+          🌡️ <strong style="color:var(--cream)">
+          Why it matters:</strong><br>
+          CO₂ traps heat causing global warming, melting
+          ice caps and extreme weather events. The lower
+          your score, the better for Earth! 🌱
+        </div>
+        <div class="widget-levels">
+          <span class="wl-great">🟢 &lt;5kg Great</span>
+          <span class="wl-okay">🟡 5-10kg OK</span>
+          <span class="wl-high">🔴 &gt;10kg High</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- NAVBAR -->
   <nav class="navbar">
@@ -514,7 +638,8 @@
       <div class="nav-streak">
         🔥 <span class="nav-streak-count">0</span>
       </div>
-      <div class="nav-avatar" onclick="window.location.href='profile.html'">
+      <div class="nav-avatar"
+        onclick="window.location.href='profile.html'">
         🌱
       </div>
     </div>
@@ -524,20 +649,15 @@
   <nav class="mobile-nav">
     <ul>
       <li><a href="dashboard.html" class="active">
-        <span class="nav-icon">🏠</span>Home
-      </a></li>
+        <span class="nav-icon">🏠</span>Home</a></li>
       <li><a href="log.html">
-        <span class="nav-icon">📝</span>Log
-      </a></li>
+        <span class="nav-icon">📝</span>Log</a></li>
       <li><a href="insights.html">
-        <span class="nav-icon">🤖</span>AI
-      </a></li>
+        <span class="nav-icon">🤖</span>AI</a></li>
       <li><a href="history.html">
-        <span class="nav-icon">📈</span>History
-      </a></li>
+        <span class="nav-icon">📈</span>History</a></li>
       <li><a href="badges.html">
-        <span class="nav-icon">🏅</span>Badges
-      </a></li>
+        <span class="nav-icon">🏅</span>Badges</a></li>
     </ul>
   </nav>
 
@@ -552,7 +672,7 @@
       </div>
       <div class="welcome-right">
         <div class="date-badge">
-          <div class="date-day" id="dateDay">16</div>
+          <div class="date-day"  id="dateDay">20</div>
           <div class="date-month" id="dateMonth">Jun 2026</div>
         </div>
         <a href="log.html" class="btn btn-primary">
@@ -561,17 +681,20 @@
       </div>
     </div>
 
-    <!-- NO LOG BANNER (shown if no log today) -->
-    <div class="no-log-banner animate-fadeUp delay-1" id="noLogBanner">
+    <!-- NO LOG BANNER -->
+    <div class="no-log-banner animate-fadeUp delay-1"
+      id="noLogBanner">
       <div style="font-size:2rem;margin-bottom:12px">📝</div>
-      <p>You haven't logged today yet! Track your carbon footprint to keep your streak alive.</p>
+      <p>You haven't logged today yet! Track your carbon
+         footprint to keep your streak alive.</p>
       <a href="log.html" class="btn btn-primary">
         🌱 Log My Day Now
       </a>
     </div>
 
     <!-- ECO FACT -->
-    <div class="dash-fact animate-fadeUp delay-1" id="factContainer"></div>
+    <div class="dash-fact animate-fadeUp delay-1"
+      id="factContainer"></div>
 
     <!-- MAIN GRID -->
     <div class="main-grid animate-fadeUp delay-2">
@@ -585,16 +708,13 @@
             Live
           </div>
         </div>
-
         <div class="globe-canvas-wrap">
           <canvas id="dash-globe"></canvas>
         </div>
-
         <div class="globe-score-overlay">
           <div class="score-val" id="globeScoreVal">—</div>
           <div class="score-lbl">kg CO₂ today</div>
         </div>
-
         <div class="globe-hint">Drag to rotate 🖱️</div>
       </div>
 
@@ -613,14 +733,17 @@
                   stroke-dashoffset="440"/>
               </svg>
               <div class="score-label">
-                <div class="score-number" id="scoreNumber">—</div>
+                <div class="score-number" id="scoreNumber">
+                  —
+                </div>
                 <div class="score-unit">kg CO₂</div>
               </div>
             </div>
           </div>
           <div class="score-info">
             <h4>Today's Carbon Score</h4>
-            <p>Global average is <strong>12.9 kg/day</strong></p>
+            <p>Global average is
+              <strong>12.9 kg/day</strong></p>
             <div class="score-status great" id="scoreStatus">
               ✅ Loading...
             </div>
@@ -631,7 +754,9 @@
         <div class="streak-card">
           <div class="streak-left">
             <h4>Current Streak</h4>
-            <div class="streak-number" id="streakNumber">0</div>
+            <div class="streak-number" id="streakNumber">
+              0
+            </div>
             <div class="streak-label">days in a row 🎯</div>
           </div>
           <div class="streak-flame">🔥</div>
@@ -654,9 +779,7 @@
         <span class="stat-icon">📅</span>
         <div class="stat-val" id="totalDays">0</div>
         <div class="stat-lbl">Days Tracked</div>
-        <div class="stat-change positive" id="totalDaysChange">
-          Keep it up! 🌱
-        </div>
+        <div class="stat-change positive">Keep it up! 🌱</div>
       </div>
       <div class="stat-card">
         <span class="stat-icon">⚖️</span>
@@ -716,13 +839,14 @@
             See all →
           </a>
         </div>
-        <div class="badges-preview-grid" id="badgesGrid"></div>
+        <div class="badges-preview-grid"
+          id="badgesGrid"></div>
       </div>
 
     </div>
   </div>
 
-  <!-- THREE.JS + CHART.JS -->
+  <!-- SCRIPTS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
   <script src="js/auth.js"></script>
@@ -730,60 +854,64 @@
   <script src="js/charts.js"></script>
 
   <script>
-    // ── INIT ──
-    const user = requireLogin();
-    if (user) {
-      initDashboard(user);
+    // ── WIDGET TOGGLE ──
+    let widgetOpen = true;
+    function toggleWidget() {
+      widgetOpen = !widgetOpen;
+      const body   = document.getElementById('widgetBody');
+      const toggle = document.getElementById('widgetToggle');
+      body.style.display     = widgetOpen ? 'block' : 'none';
+      toggle.style.transform = widgetOpen
+        ? 'rotate(0deg)' : 'rotate(-90deg)';
     }
 
+    // ── INIT ──
+    const user = requireLogin();
+    if (user) initDashboard(user);
+
     function initDashboard(user) {
-      // User name
       document.getElementById('userName').textContent =
         user.firstName || user.name || 'Eco Explorer';
 
-      // Date
       const now = new Date();
       document.getElementById('dateDay').textContent =
         now.getDate();
       document.getElementById('dateMonth').textContent =
-        now.toLocaleDateString('en-IN', { month:'short', year:'numeric' });
+        now.toLocaleDateString('en-IN',
+          { month:'short', year:'numeric' });
 
-      // Streak
       document.getElementById('streakNumber').textContent =
         user.streak || 0;
 
-      // Eco fact
       renderFactCard('factContainer');
 
-      // Today's log
       const todayLog = getTodayLog();
-
       if (todayLog) {
-        document.getElementById('noLogBanner').style.display = 'none';
+        document.getElementById('noLogBanner')
+          .style.display = 'none';
         updateScoreDisplay(todayLog.carbon);
         document.getElementById('globeScoreVal').textContent =
           todayLog.carbon + ' kg';
-        if (window.updateGlobeScore) {
+        if (window.updateGlobeScore)
           window.updateGlobeScore(todayLog.carbon);
-        }
       } else {
         updateScoreDisplay(null);
       }
 
-      // Stats
       const logs = getUserLogs(30);
       document.getElementById('totalDays').textContent =
         user.totalLogs || 0;
 
       if (logs.length > 0) {
-        const avg = logs.reduce((s, l) => s + l.carbon, 0) / logs.length;
+        const avg = logs.reduce((s,l) => s+l.carbon, 0)
+          / logs.length;
         document.getElementById('avgCarbon').textContent =
           avg.toFixed(1);
 
         const trees = Math.floor(
-          logs.reduce((s, l) => s + l.carbon, 0) / 21
-        );
-        document.getElementById('treesSaved').textContent = trees;
+          logs.reduce((s,l) => s+l.carbon, 0) / 21);
+        document.getElementById('treesSaved').textContent =
+          trees;
 
         const avgEl = document.getElementById('avgChange');
         if (avg < 5) {
@@ -798,20 +926,18 @@
         }
       }
 
-      // Badges
       const badges = user.badges || ['🌱'];
       document.getElementById('badgeCount').textContent =
         badges.length;
       renderBadgeGrid(badges);
-
-      // Chart
       renderWeeklyChart();
     }
 
     function updateScoreDisplay(carbon) {
       const numEl    = document.getElementById('scoreNumber');
       const statusEl = document.getElementById('scoreStatus');
-      const ringFill = document.getElementById('scoreRingFill');
+      const ringFill =
+        document.getElementById('scoreRingFill');
 
       if (carbon === null) {
         numEl.textContent    = '—';
@@ -822,44 +948,48 @@
 
       numEl.textContent = carbon;
 
-      // Ring fill (max ~20kg = full ring)
       const pct    = Math.min(carbon / 20, 1);
       const offset = 440 - (440 * pct);
       ringFill.style.strokeDashoffset = offset;
 
       if (carbon < 5) {
         ringFill.classList.add('low');
-        statusEl.innerHTML  = '🌟 Excellent! Below 5kg';
-        statusEl.className  = 'score-status great';
+        statusEl.innerHTML = '🌟 Excellent! Below 5kg';
+        statusEl.className = 'score-status great';
       } else if (carbon < 10) {
         ringFill.classList.add('medium');
-        statusEl.innerHTML  = '👍 Good — below average';
-        statusEl.className  = 'score-status okay';
+        statusEl.innerHTML = '👍 Good — below average';
+        statusEl.className = 'score-status okay';
       } else {
         ringFill.classList.add('high');
-        statusEl.innerHTML  = '⚠️ High — let\'s reduce!';
-        statusEl.className  = 'score-status high';
+        statusEl.innerHTML = '⚠️ High — let\'s reduce!';
+        statusEl.className = 'score-status high';
       }
     }
 
     function renderBadgeGrid(earnedBadges) {
       const grid    = document.getElementById('badgesGrid');
       const preview = [
-        { emoji:'🌱', name:'First Breath',  color:'#52B788,#2D6A4F', id:'first_log'  },
-        { emoji:'🔥', name:'Green Flame',   color:'#DDA15E,#BC6C25', id:'streak_7'   },
-        { emoji:'🌍', name:'Earth Watcher', color:'#48CAE4,#0096C7', id:'earth_watch' },
-        { emoji:'👑', name:'Guardian',      color:'#606C38,#283618', id:'streak_30'  },
-        { emoji:'💎', name:'Legend',        color:'#a29bfe,#6c5ce7', id:'streak_100' },
-        { emoji:'🏅', name:'Champion',      color:'#f4d03f,#e67e22', id:'sharer'     },
+        { emoji:'🌱', name:'First Breath',
+          color:'#52B788,#2D6A4F', id:'first_log' },
+        { emoji:'🔥', name:'Green Flame',
+          color:'#DDA15E,#BC6C25', id:'streak_7' },
+        { emoji:'🌍', name:'Earth Watcher',
+          color:'#48CAE4,#0096C7', id:'earth_watch' },
+        { emoji:'👑', name:'Guardian',
+          color:'#606C38,#283618', id:'streak_30' },
+        { emoji:'💎', name:'Legend',
+          color:'#a29bfe,#6c5ce7', id:'streak_100' },
+        { emoji:'🏅', name:'Champion',
+          color:'#f4d03f,#e67e22', id:'sharer' },
       ];
 
       grid.innerHTML = preview.map(b => {
-        const earned  = earnedBadges.includes(b.id) ||
+        const earned = earnedBadges.includes(b.id) ||
           earnedBadges.includes(b.emoji);
-        const locked  = !earned ? 'locked' : '';
         return `
           <div class="badge-mini">
-            <div class="bm-circle ${locked}"
+            <div class="bm-circle ${!earned ? 'locked' : ''}"
               style="background:linear-gradient(135deg,
                 ${earned ? b.color : '#ccc,#aaa'})">
               ${b.emoji}
@@ -870,51 +1000,51 @@
     }
 
     function renderWeeklyChart() {
-      const logs  = getUserLogs(7);
-      const days  = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-      const today = new Date().getDay();
+      const logs   = getUserLogs(7);
       const labels = Array.from({length:7}, (_, i) => {
         const d = new Date();
-        d.setDate(d.getDate() - (6 - i));
-        return d.toLocaleDateString('en-IN', { weekday:'short' });
+        d.setDate(d.getDate() - (6-i));
+        return d.toLocaleDateString('en-IN',
+          {weekday:'short'});
       });
 
       const data = labels.map((_, i) => {
         const d = new Date();
-        d.setDate(d.getDate() - (6 - i));
-        const dateStr = d.toDateString();
-        const log = logs.find(l => l.date === dateStr);
+        d.setDate(d.getDate() - (6-i));
+        const log = logs.find(l =>
+          l.date === d.toDateString());
         return log ? log.carbon : null;
       });
 
-      const ctx = document.getElementById('weeklyChart').getContext('2d');
+      const ctx = document.getElementById('weeklyChart')
+        .getContext('2d');
+
       new Chart(ctx, {
         type: 'line',
         data: {
           labels,
           datasets: [
             {
-              label:           'Your CO₂',
+              label:            'Your CO₂',
               data,
-              borderColor:     '#606C38',
-              backgroundColor: 'rgba(96,108,56,0.08)',
-              borderWidth:     2.5,
+              borderColor:      '#606C38',
+              backgroundColor:  'rgba(96,108,56,0.08)',
+              borderWidth:      2.5,
               pointBackgroundColor: '#606C38',
-              pointRadius:     5,
-              pointHoverRadius:7,
-              tension:         0.4,
-              fill:            true,
-              spanGaps:        true,
+              pointRadius:      5,
+              pointHoverRadius: 7,
+              tension:          0.4,
+              fill:             true,
+              spanGaps:         true,
             },
             {
-              label:           'Global avg',
-              data:            Array(7).fill(12.9),
-              borderColor:     '#E63946',
-              borderWidth:     1.5,
-              borderDash:      [6, 4],
-              pointRadius:     0,
-              tension:         0,
-              fill:            false,
+              label:       'Global avg',
+              data:        Array(7).fill(12.9),
+              borderColor: '#E63946',
+              borderWidth: 1.5,
+              borderDash:  [6,4],
+              pointRadius: 0,
+              fill:        false,
             },
           ],
         },
@@ -928,17 +1058,15 @@
               bodyColor:       'rgba(254,250,224,0.8)',
               padding:         12,
               callbacks: {
-                label: ctx =>
-                  ctx.parsed.y !== null
-                    ? `${ctx.parsed.y} kg CO₂`
-                    : 'No log',
+                label: ctx => ctx.parsed.y !== null
+                  ? `${ctx.parsed.y} kg CO₂` : 'No log',
               },
             },
           },
           scales: {
             y: {
               beginAtZero: true,
-              grid: { color: 'rgba(96,108,56,0.06)' },
+              grid:  { color: 'rgba(96,108,56,0.06)' },
               ticks: {
                 color:    '#606C38',
                 font:     { size: 11 },
@@ -947,7 +1075,10 @@
             },
             x: {
               grid:  { display: false },
-              ticks: { color: '#606C38', font: { size: 11 } },
+              ticks: {
+                color: '#606C38',
+                font:  { size: 11 },
+              },
             },
           },
         },
