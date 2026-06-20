@@ -502,17 +502,46 @@
     }
 
     function handleGoogleLogin() {
-      // Simulate Google login for demo
-      const demoUser = {
-        name:   'Eco Explorer',
-        email:  'demo@ecolens.app',
-        avatar: '🌿',
-        joined: new Date().toISOString(),
-      };
-      localStorage.setItem('ecolens_user', JSON.stringify(demoUser));
-      document.getElementById('successOverlay').classList.add('show');
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1800);
-    }
+  // Check if a Google user already exists
+  const existingUsers = JSON.parse(
+    localStorage.getItem('ecolens_users') || '[]'
+  );
+  const googleUser = existingUsers.find(
+    u => u.email === 'demo@ecolens.app'
+  );
+
+  if (googleUser) {
+    // Return existing user — don't create new one!
+    localStorage.setItem('ecolens_user',
+      JSON.stringify(googleUser));
+  } else {
+    // First time Google login — create once
+    const newGoogleUser = {
+      id:        'google_demo_001',
+      name:      'Eco Explorer',
+      firstName: 'Eco',
+      lastName:  'Explorer',
+      email:     'demo@ecolens.app',
+      avatar:    '🌿',
+      city:      'India',
+      joined:    new Date().toISOString(),
+      streak:    0,
+      badges:    ['🌱'],
+      totalLogs: 0,
+    };
+    existingUsers.push(newGoogleUser);
+    localStorage.setItem('ecolens_users',
+      JSON.stringify(existingUsers));
+    localStorage.setItem('ecolens_user',
+      JSON.stringify(newGoogleUser));
+  }
+
+  document.getElementById('successOverlay')
+    .classList.add('show');
+  setTimeout(() => {
+    window.location.href = 'dashboard.html';
+  }, 1800);
+}
 
     // Clear errors on input
     document.querySelectorAll('input').forEach(inp => {
@@ -522,10 +551,10 @@
       });
     });
 
-    // Check if already logged in
-    if (localStorage.getItem('ecolens_user')) {
-      window.location.href = 'dashboard.html';
-    }
+   // Check if already logged in
+if (localStorage.getItem('ecolens_user')) {
+  window.location.href = 'dashboard.html';
+}
   </script>
 </body>
 </html>

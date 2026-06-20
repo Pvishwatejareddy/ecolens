@@ -582,10 +582,11 @@
       );
 
       if (users.find(u => u.email === email)) {
-        errorMsg.classList.add('show');
-        errorTxt.textContent = 'Email already registered! Try signing in.';
-        return;
-      }
+  errorMsg.classList.add('show');
+  errorTxt.textContent =
+    'Email already registered! Try signing in.';
+  return;
+}
 
       // Create user
       const newUser = {
