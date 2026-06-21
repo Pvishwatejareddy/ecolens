@@ -862,7 +862,16 @@ Respond in this EXACT JSON format:
 
       const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://github.com/Pvishwatejareddy/ecolens')}`;
       window.open(url, '_blank');
-      unlockBadge('sharer');
+     // Only unlock sharer badge when user actually shares
+  const user = getCurrentUser();
+  if (user) {
+    const earned = user.badges || [];
+    if (!earned.includes('sharer')) {
+      const newBadges = [...earned, 'sharer'];
+      updateUser({ badges: newBadges });
+      showBadgeToast(BADGES['sharer']);
+    }
+  }
       showToast('🌍 Thanks for spreading the word!', 'success');
     }
   </script>

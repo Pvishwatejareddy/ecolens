@@ -680,18 +680,20 @@
     }
 
     function clearData() {
-      if (confirm(
-        '⚠️ This will delete ALL your logs and badges. Are you sure?'
-      )) {
-        const u = getCurrentUser();
-        if (u) {
-          localStorage.removeItem(`ecolens_logs_${u.id}`);
-          updateUser({
-            streak:    0,
-            badges:    [],
-            totalLogs: 0,
-          });
-        }
+  if (confirm(
+    '⚠️ This will delete ALL your logs and badges. Are you sure?'
+  )) {
+    const u = getCurrentUser();
+    if (u) {
+      localStorage.removeItem(`ecolens_logs_${u.id}`);
+      updateUser({
+        streak:      0,
+        badges:      [],
+        totalLogs:   0,
+        lastLogDate:   null,
+        lastLoginDate: null,
+      });
+    }
         showToast('🗑️ All data cleared', 'warning');
         setTimeout(() =>
           window.location.href = 'dashboard.html', 1500);

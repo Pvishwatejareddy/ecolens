@@ -479,102 +479,7 @@
       margin-bottom: 16px;
     }
 
-    /* ── CARBON WIDGET ── */
-    .carbon-widget {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 999;
-      max-width: 280px;
-    }
-
-    .carbon-widget-card {
-      background: linear-gradient(135deg,
-        var(--moss-dark), var(--moss));
-      border-radius: 16px;
-      padding: 16px 20px;
-      box-shadow: 0 8px 32px rgba(40,54,24,0.25);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .carbon-widget-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(40,54,24,0.35);
-    }
-
-    .widget-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .widget-top-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .widget-title {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--amber);
-    }
-
-    .widget-toggle {
-      color: rgba(254,250,224,0.6);
-      font-size: 0.8rem;
-      transition: transform 0.3s ease;
-    }
-
-    .widget-body p {
-      font-size: 0.82rem;
-      color: rgba(254,250,224,0.85);
-      line-height: 1.6;
-      margin-bottom: 10px;
-    }
-
-    .widget-why {
-      background: rgba(255,255,255,0.08);
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 0.78rem;
-      color: rgba(254,250,224,0.75);
-      line-height: 1.6;
-      margin-bottom: 10px;
-    }
-
-    .widget-levels {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      font-size: 0.7rem;
-      font-weight: 700;
-    }
-
-    .wl-great {
-      background: rgba(82,183,136,0.2);
-      color: #52B788;
-      padding: 4px 10px;
-      border-radius: 100px;
-    }
-
-    .wl-okay {
-      background: rgba(221,161,94,0.2);
-      color: var(--amber);
-      padding: 4px 10px;
-      border-radius: 100px;
-    }
-
-    .wl-high {
-      background: rgba(230,57,70,0.15);
-      color: #E63946;
-      padding: 4px 10px;
-      border-radius: 100px;
-    }
+   
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
@@ -592,38 +497,7 @@
 </head>
 <body>
 
-  <!-- CARBON INFO WIDGET -->
-  <div class="carbon-widget">
-    <div class="carbon-widget-card" onclick="toggleWidget()">
-      <div class="widget-top">
-        <div class="widget-top-left">
-          <span style="font-size:1.2rem">🌍</span>
-          <span class="widget-title">What is Carbon Score?</span>
-        </div>
-        <span class="widget-toggle" id="widgetToggle">▼</span>
-      </div>
-      <div class="widget-body" id="widgetBody">
-        <p>
-          Your <strong style="color:var(--amber)">
-          Carbon Score</strong> is the total kg of CO₂
-          your daily activities release into the atmosphere.
-        </p>
-        <div class="widget-why">
-          🌡️ <strong style="color:var(--cream)">
-          Why it matters:</strong><br>
-          CO₂ traps heat causing global warming, melting
-          ice caps and extreme weather events. The lower
-          your score, the better for Earth! 🌱
-        </div>
-        <div class="widget-levels">
-          <span class="wl-great">🟢 &lt;5kg Great</span>
-          <span class="wl-okay">🟡 5-10kg OK</span>
-          <span class="wl-high">🔴 &gt;10kg High</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
+ 
   <!-- NAVBAR -->
   <nav class="navbar">
     <div class="nav-logo">Eco<span>Lens</span></div>
@@ -854,17 +728,7 @@
   <script src="js/charts.js"></script>
 
   <script>
-    // ── WIDGET TOGGLE ──
-    let widgetOpen = true;
-    function toggleWidget() {
-      widgetOpen = !widgetOpen;
-      const body   = document.getElementById('widgetBody');
-      const toggle = document.getElementById('widgetToggle');
-      body.style.display     = widgetOpen ? 'block' : 'none';
-      toggle.style.transform = widgetOpen
-        ? 'rotate(0deg)' : 'rotate(-90deg)';
-    }
-
+    
     // ── INIT ──
     const user = requireLogin();
     if (user) initDashboard(user);
